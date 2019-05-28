@@ -17,7 +17,7 @@ let appData = require('../data.json')
 let seller = appData.seller
 let goods = appData.goods
 let ratings = appData.ratings
-console.log(goods)
+
 let apiRouter = express.Router()
 app.use('/api',apiRouter)
 
@@ -61,7 +61,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           data:appData
         })
       }),
-      app.get('/api/seller', function (req, res) {
+      app.get('/api/sellers', function (req, res) {
         res.json({
           errno:0,
           data:seller

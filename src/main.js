@@ -4,8 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import head from './components/header/header'
+import './common/stylus/index.styl'
 Vue.component('v-header', head)
-
 
 Vue.config.productionTip = false
 

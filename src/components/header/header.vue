@@ -71,7 +71,6 @@
            bg-image('brand')
            background-size :100%
            background-repeat :no-repeat
-
       .left
         width: 64px
         height: 64px

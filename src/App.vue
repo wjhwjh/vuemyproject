@@ -3,7 +3,9 @@
     <div class="headWrap">
       <v-header></v-header>
     </div>
-    <div class="tab"></div>
+    <div class="tab">
+
+    </div>
     <div class="content"></div>
   </div>
 </template>

@@ -66,7 +66,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   //引用公共的后缀为styl的样式文件，图片的兼容
-  @import "../../common/stylus/mixin.styl";
+   @import "../../common/stylus/mixin.styl";
   .head
     position: relative
     overflow: hidden

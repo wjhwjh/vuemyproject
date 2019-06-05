@@ -52,4 +52,6 @@ table {
 }
 .clearFix{
 }
-
+a{
+text-decoration: none;
+}

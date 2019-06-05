@@ -48,25 +48,31 @@
 
 <script>
   export default {
-    data (){
-     return {
-      popFlag:false
-     }
+    data () {
+      return {
+        popFlag: false
+      }
     },
     methods: {
-      popShow(){
+      popShow () {
         this.popFlag = !this.popFlag
       },
-      popHide(){
+      popHide () {
         this.popFlag = !this.popFlag
       }
+    },
+    mounted () {
+      console.log(this)
+      this.$ajax.get('/goods').then((res) => {
+        //console.log(res)
+      })
     }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
   //引用公共的后缀为styl的样式文件，图片的兼容
-   @import "../../common/stylus/mixin.styl";
+  @import "../../common/stylus/mixin.styl";
   .head
     position: relative
     overflow: hidden
@@ -150,11 +156,11 @@
       padding: 64px 36px 0
       .closePop
         position: absolute
-        font-size :32px
-        bottom :32px
-        left :50%
-        margin-left:-16px
-        color :rgba(255,255,255,0.5)
+        font-size: 32px
+        bottom: 32px
+        left: 50%
+        margin-left: -16px
+        color: rgba(255, 255, 255, 0.5)
       .sellerDetail
         font-size: 14px
         font-weight: 200

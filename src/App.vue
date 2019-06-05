@@ -14,7 +14,6 @@
         <router-link :to="{ path:'/seller'}">商家</router-link>
       </li>
     </ul>
-    <!-- <div class="content"></div>-->
     <router-view></router-view>
 
     <v-foot></v-foot>
@@ -43,9 +42,10 @@
     li
       line-height: 40px
       font-size: 14px
-      color: rgb(77, 85, 93)
       flex: 1
       text-align: center
-      &.act
+      &.act>a
         color: rgb(240, 20, 20)
+      &>a
+        color: rgb(77, 85, 93)
 </style>

@@ -4,7 +4,7 @@
       <ul class="menu">
         <li class="item" v-for="item in goodData">
            <div class="cont">
-              <span class="icon" v-if="item.type === 2">11</span>{{ item.name }}
+              <span class="icon" v-if="item.type === 2"> </span>{{ item.name }}
            </div>
         </li>
       </ul>
@@ -67,6 +67,14 @@
           .cont
             display :table-cell
             vertical-align: middle
+            line-height :16px
+            .icon
+              width: 16px
+              height: 16px
+              display: inline-block
+              background-size: 100%
+              background-repeat: no-repeat
+              bg-image(special_1)
     .good-wrap
       flex :1
 </style>

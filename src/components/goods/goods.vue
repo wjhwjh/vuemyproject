@@ -1,16 +1,34 @@
 <template>
   <div class="good">
+    <!--左边-->
     <div class="menu-wrap">
       <ul class="menu">
         <li class="item" v-for="item in goodData">
            <div class="cont">
-              <span class="icon" v-if="item.type === 2"> </span>{{ item.name }}
+              <span class="icon"  v-if="item.type > 0" :class="classMap[item.type]"> </span>{{ item.name }}
            </div>
         </li>
       </ul>
     </div>
-    <div class="good-wrap">
 
+    <!--右边-->
+    <div class="good-wrap">
+        <ul class="good-list">
+          <li class="good-item" v-for="goods in goodData">
+            <h2 class="good-tit">{{goods.name}}</h2>
+            <ul class="item-list">
+              <li class="item" v-for="item in goods.foods">
+                 <div class="img">
+                   <img :src= "item.image"  alt="">
+
+                 </div>
+                 <div class="desc">
+
+                 </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
     </div>
   </div>
 </template>
@@ -20,10 +38,14 @@
   export default {
     data () {
       return {
-        goodData: []
+        goodData: [],
+        icon: 'icon',
+        classMap: []
       }
     },
-    mounted () {
+    created () {
+     this.classMap = ['decrease' , 'discount', 'guarantee', 'invoice', 'special'];
+
       this.$ajax.get('/goods')
         .then((res) => {
            console.log(res.data)
@@ -38,7 +60,7 @@
   }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl";
   .good
     position: absolute
@@ -67,14 +89,25 @@
           .cont
             display :table-cell
             vertical-align: middle
-            line-height :16px
+            line-height :14px
             .icon
-              width: 16px
-              height: 16px
+              width: 14px;
+              height: 14px;
               display: inline-block
               background-size: 100%
               background-repeat: no-repeat
-              bg-image(special_1)
+              margin-right: 4px
+              vertical-align :middle
+              &.decrease
+                bg-image(decrease_1)
+              &.discount
+                bg-image(discount_1)
+              &.guarantee
+                bg-image(guarantee_1)
+              &.invoice
+                bg-image(invoice_1)
+              &.special
+                bg-image(special_1)
     .good-wrap
       flex :1
 </style>

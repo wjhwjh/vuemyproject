@@ -15,7 +15,7 @@
     <div class="good-wrap">
         <ul class="good-list">
           <li class="good-item" v-for="goods in goodData">
-            <h2 class="good-tit">{{goods.name}}</h2>
+            <h2 class="good-title">{{goods.name}}</h2>
             <ul class="item-list">
               <li class="item" v-for="item in goods.foods">
                  <div class="img">
@@ -110,4 +110,23 @@
                 bg-image(special_1)
     .good-wrap
       flex :1
+      .good-list
+        padding: 0
+        .good-item
+          width: 100%
+          .good-title
+            font-size :16px
+          .item-list
+            width :100%
+          .item
+            display: flex
+            .img
+              width :120px
+              &>img
+                width: 100%
+                height :auto
+
+            .desc
+              flex :1
+
 </style>

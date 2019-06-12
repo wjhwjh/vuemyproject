@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import foot from './components/foot/foot'
+  import foot from './components/shopcart/shopcart'
 
   export default {
     data () {

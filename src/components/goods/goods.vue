@@ -3,7 +3,8 @@
     <!--左边-->
     <div class="menu-wrap" ref="menuWrap">
       <ul class="menu">
-        <li class="item" v-for="(item, index) in goodData" :class="{'current' : getIndex === index}" @click="selectMenu(index, $event)">
+        <li class="item" v-for="(item, index) in goodData" :class="{'current' : getIndex === index}"
+            @click="selectMenu(index, $event)">
           <div class="cont">
             <span class="icon" v-if="item.type > 0" :class="classMap[item.type]"> </span>{{ item.name }}
           </div>
@@ -38,10 +39,16 @@
         </li>
       </ul>
     </div>
+
+
+    <!--购物车-->
+    <shop-cart :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
+
   </div>
 </template>
 
 <script>
+  import foot from '../shopcart/shopcart'
   import BScroll from 'better-scroll'
 
   let ERR_OK = 0
@@ -51,6 +58,14 @@
         goodData: [],
         scrollHeightArr: [],
         scrollY: 0
+      }
+    },
+    components: {
+      'shopCart': foot
+    },
+    props:{
+      seller: {
+        type:Object
       }
     },
     created () {
@@ -74,10 +89,12 @@
     computed: {
       // 右侧商品滚动映射到左边菜单栏时的计算
       getIndex () {
+
+        //console.log(this)
         let len = this.scrollHeightArr.length
         for (let i = 0; i < len; i++) {
-           let height1 = this.scrollHeightArr[i];
-           let height2 = this.scrollHeightArr[i+1];
+          let height1 = this.scrollHeightArr[i]
+          let height2 = this.scrollHeightArr[i + 1]
           if (!height2 || this.scrollY >= height1 && this.scrollY < height2) {
             return i
           }
@@ -118,20 +135,22 @@
       },
 
       // 左边菜单映射
-      selectMenu(index, event){
+      selectMenu (index, event) {
         //console.log(index)
         //console.log(event)
-        if(!event._constructed){
-          return;
-         }
-         // 获取右边商品列表
-         let foodList = this.$refs.foodWrap.getElementsByClassName('food-list-hook')
+        if (!event._constructed) {
+          return
+        }
+        // 获取右边商品列表
+        let foodList = this.$refs.foodWrap.getElementsByClassName('food-list-hook')
 
-         // 获取与点击索引值相同的商品模块
-         let el = foodList[index];
+        // 获取与点击索引值相同的商品模块
+        let el = foodList[index]
 
-         // 直接使用，跳转到对应的模块，简直太方便了
-         this.foodScroll.scrollToElement(el, 300);
+        // 直接使用，跳转到对应的模块，简直太方便了
+        this.foodScroll.scrollToElement(el, 300)
+
+        console.log( this.seller.sellerD );
 
       }
     }
@@ -167,16 +186,16 @@
           line-height: 14px
           border-1px(rgba(7, 17, 27, 0.1))
           &.current
-           background :#fff
-           font-weight: bold
-           margin-top :-1px
-           border-no()
+            background: #fff
+            font-weight: bold
+            margin-top: -1px
+            border-no()
           &:after
-            width :56px
-            left :50%
+            width: 56px
+            left: 50%
             margin-left: -28px
-            top :auto
-            bottom :0
+            top: auto
+            bottom: 0
           &:last-child
             border-no()
           .cont

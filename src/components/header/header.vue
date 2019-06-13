@@ -53,19 +53,30 @@
         popFlag: false
       }
     },
+    props: {
+      seller: {
+        type: Object
+      }
+    },
     methods: {
       popShow () {
         this.popFlag = !this.popFlag
+
+        console.log(this._props);
+        console.log(this.seller);
       },
       popHide () {
         this.popFlag = !this.popFlag
       }
     },
     mounted () {
-      console.log(this)
+      // console.log(this)
       this.$ajax.get('/goods').then((res) => {
-        //console.log(res)
+        // console.log(res)
       })
+
+
+
     }
   }
 </script>

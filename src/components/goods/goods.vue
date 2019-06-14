@@ -30,9 +30,9 @@
                   v-show="item.oldPrice" class="normalPrice">￥{{item.oldPrice}}</span></p>
               </div>
               <div class="btnBox">
-                <span class="leftBtn icon-remove_circle_outline"></span>
-                <span class="goodNum">1</span>
-                <span class="rightBtn icon-add_circle"></span>
+                <span class="leftBtn icon-remove_circle_outline" @click="reduceNum"></span>
+                <span class="goodNum">{{numCount}}</span>
+                <span class="rightBtn icon-add_circle" @click="addNum"></span>
               </div>
             </li>
           </ul>
@@ -57,7 +57,8 @@
       return {
         goodData: [],
         scrollHeightArr: [],
-        scrollY: 0
+        scrollY: 0,
+        num:0
       }
     },
     components: {
@@ -89,7 +90,6 @@
     computed: {
       // 右侧商品滚动映射到左边菜单栏时的计算
       getIndex () {
-
         //console.log(this)
         let len = this.scrollHeightArr.length
         for (let i = 0; i < len; i++) {
@@ -100,6 +100,9 @@
           }
         }
         return 0
+      },
+      numCount(){
+        return this.num
       }
     },
     methods: {
@@ -110,7 +113,8 @@
           click: true  // 这里设置为true, 才可以给menu注册点击事件，否则滚动事件是阻止点击事件的
         })
         this.foodScroll = new BScroll(this.$refs.foodWrap, {
-          probeType: 3 // 当food部分滚动的时候，可以检测到滚动的位置
+          probeType: 3, // 当food部分滚动的时候，可以检测到滚动的位置
+          click: true
         })
         // 通过on可以监听当前滚动的位置
         this.foodScroll.on('scroll', pos => {
@@ -150,8 +154,16 @@
         // 直接使用，跳转到对应的模块，简直太方便了
         this.foodScroll.scrollToElement(el, 300)
 
-        console.log( this.seller.sellerD );
+        //console.log( this.seller.sellerD );
 
+      },
+
+      // 添加商品
+      addNum(){
+        this.num++
+      },
+      reduceNum(){
+        this.num--
       }
     }
 

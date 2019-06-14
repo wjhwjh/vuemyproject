@@ -2,22 +2,23 @@
   <div class="cartWrap">
     <div class="foot">
       <!--购物车-->
-      <div class="cart" :class="{'cartSelect': cartResult}" @click="cartShow">
+      <div class="cart" :class="{'cartSelect': totalPrice}" @click="cartShow">
         <div class="icon-shopping_cart icon"></div>
-        <div class="cartNum" v-show="cartResult">18</div>
+        <div class="cartNum" v-show="totalPrice">{{totalCount}}</div>
       </div>
 
       <!--总价和配送费-->
       <div class="price">
-        <div class="left">
+        <div class="left" :class="{'highlight': totalPrice}">
           ￥{{totalPrice}}
         </div>
         <div class="right">
-          另需配送费￥{{deliveryPrice}}元{{fn}}
+          另需配送费￥{{deliveryPrice}}元
         </div>
       </div>
       <!--去结算按钮-->
-      <div class="result" :class="{totalR: totalFlag}">
+      <!--结算按钮直接使用总价和最低配送价的表达式控制样式，不需要另外定义一个变量-->
+      <div class="result" :class="{totalR: totalPrice>=minPrice}">
         {{totalResult}}
       </div>
     </div>
@@ -65,16 +66,28 @@
   export default {
     data () {
       return {
-        totalPrice: 10,
-        totalFlag: false,
+        //  totalPrice: 10,
+        // totalFlag: false,
         cartPopFlag: false
       }
     },
     // props接收父组件传递的变量数据，这里是整数，并设置初始默认值
     props: {
+      // 父组件传递的所选择的商品
+      selectedFood: {
+        type: Array,
+        default: () => {
+          return [
+            {
+              price: 10,
+              count: 1
+            }
+          ]
+        }
+      },
       deliveryPrice: {
         type: Number,
-        default: 0
+        default: 3
       },
       minPrice: {
         type: Number,
@@ -83,20 +96,40 @@
     },
     // 用于计算，
     computed: {
+      // 计算总价格
+      totalPrice () {
+        let total = 0
+        this.selectedFood.forEach((item) => {
+          console.log(item)
+          total += item.price * item.count
+        })
+        return total
+      },
+
+      // 计算商品总件数
+      totalCount(){
+        let allCount = 0
+        this.selectedFood.forEach( item => {
+          allCount += item.count
+        })
+        return allCount
+      },
+
       // 结算按钮计算
       totalResult () {
-        if (this.totalPrice < this.minPrice) {
+        /*
+        * 当小于最低配送价时，显示差价
+        * 当大于或是等于最低配送价时，显示‘去结算’
+        * 默认是显示是--- 最低配送价格
+        * */
+        if (this.totalPrice === 0) {
+          return `￥${this.minPrice}起送`
+        } else if (this.totalPrice < this.minPrice) {
           let price = this.minPrice - this.totalPrice
-          this.totalFlag = false
           return `还差￥${price}起送`
         } else {
-          this.totalFlag = true
-          return `￥${this.totalPrice},去结算`
+          return `去结算`
         }
-      },
-      // 购物车样式同步
-      cartResult () {
-        if (this.totalPrice > 0) return true
       },
       fn: v => {
         //console.log(this);
@@ -109,15 +142,15 @@
     methods: {
       // 显示所选商品弹层
       cartShow () {
+        //console.log(this);
         if (this.totalPrice > 0) {
-          this.cartPopFlag = true;
+          this.cartPopFlag = true
 
         }
       },
-
       // 关闭所选商品弹层
-      cartHidden() {
-        this.cartPopFlag = false;
+      cartHidden () {
+        this.cartPopFlag = false
       }
     }
 
@@ -157,6 +190,8 @@
           color: rgba(255, 255, 255, 0.4)
           font-weight: 700
           border-right: 1px solid rgba(255, 255, 255, 0.1)
+          &.highlight
+           color :#fff
       .cart
         position: absolute
         bottom: 0

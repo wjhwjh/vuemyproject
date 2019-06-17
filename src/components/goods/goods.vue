@@ -29,10 +29,8 @@
                 <p class="foodPrice"><i class="nowPriceI">￥</i><span class="nowPrice">{{item.price}}</span><span
                   v-show="item.oldPrice" class="normalPrice">￥{{item.oldPrice}}</span></p>
               </div>
-              <div class="btnBox">
-                <span class="leftBtn icon-remove_circle_outline" @click="reduceNum"></span>
-                <span class="goodNum">{{numCount}}</span>
-                <span class="rightBtn icon-add_circle" @click="addNum"></span>
+              <div class="controlWrap">
+                <control-cart :food="item"></control-cart>
               </div>
             </li>
           </ul>
@@ -42,14 +40,17 @@
 
 
     <!--购物车-->
-    <shop-cart :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
+    <shop-cart :selected-food="selectedFoods" :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
 
   </div>
 </template>
 
 <script>
   import foot from '../shopcart/shopcart'
+  import controlcart from '../controlcart/controlcart'
   import BScroll from 'better-scroll'
+
+  //console.log(controlcart)
 
   let ERR_OK = 0
   export default {
@@ -62,7 +63,8 @@
       }
     },
     components: {
-      'shopCart': foot
+      'shopCart': foot,
+      'controlCart': controlcart
     },
     props:{
       seller: {
@@ -101,8 +103,18 @@
         }
         return 0
       },
-      numCount(){
-        return this.num
+      // 统计数量有变化的商品，传递给子组件-- 计算属性，这里对数据进行了处理
+      // 有则直接用，没有则创造出来，然后直接用
+      selectedFoods(){
+        let food = [];
+        this.goodData.forEach((goods)=> {
+           goods.foods.forEach(item => {
+              if(!!item.count){
+                food.push(item)
+              }
+           })
+        })
+        return food
       }
     },
     methods: {
@@ -135,13 +147,11 @@
           height += elLi[i].clientHeight
           this.scrollHeightArr.push(height)
         }
-        //console.log(this.scrollHeightArr)
+
       },
 
       // 左边菜单映射
       selectMenu (index, event) {
-        //console.log(index)
-        //console.log(event)
         if (!event._constructed) {
           return
         }
@@ -154,16 +164,8 @@
         // 直接使用，跳转到对应的模块，简直太方便了
         this.foodScroll.scrollToElement(el, 300)
 
-        //console.log( this.seller.sellerD );
+       // console.log( this.goodData );
 
-      },
-
-      // 添加商品
-      addNum(){
-        this.num++
-      },
-      reduceNum(){
-        this.num--
       }
     }
 
@@ -293,25 +295,12 @@
                   padding-left: 8px
                   text-decoration: line-through
 
-            .btnBox
+            .controlWrap
               position: absolute
               right: 0
               bottom: 5px
               display: flex;
-              align-items: stretch
-              .leftBtn, .rightBtn
-                font-size: 24px
-                line-height: 24px
-              .leftBtn
-                color: rgb(0, 160, 220)
-              .rightBtn
-                color: rgb(0, 160, 220)
-              .goodNum
-                font-size: 10px
-                color: rgb(147, 153, 159)
-                line-height: 24px
-                width: 24px
-                text-align: center
+
 
 
 </style>

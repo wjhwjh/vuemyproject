@@ -27,42 +27,30 @@
     <div class="bg" v-show="cartPopFlag" @click="cartHidden"></div>
     <div class="cartFood" v-show="cartPopFlag">
       <div class="cartTit">
-        购物车 <span class="clear">清空</span>
+        购物车 <span class="clear" @click="clearCart">清空</span>
       </div>
-      <ul class="cartList">
-        <li class="item">
-          <h3 class="footTit">莲子核桃黑米粥</h3>
-          <div class="btnBox">
-            <span class="price">￥10</span>
-            <span class="leftBtn icon-remove_circle_outline"></span>
-            <span class="goodNum">1</span>
-            <span class="rightBtn icon-add_circle"></span>
-          </div>
-        </li>
-        <li class="item">
-          <h3 class="footTit">莲子核桃黑米粥</h3>
-          <div class="btnBox">
-            <span class="price">￥10</span>
-            <span class="leftBtn icon-remove_circle_outline"></span>
-            <span class="goodNum">1</span>
-            <span class="rightBtn icon-add_circle"></span>
-          </div>
-        </li>
-        <li class="item">
-          <h3 class="footTit">莲子核桃黑米粥</h3>
-          <div class="btnBox">
-            <span class="price">￥10</span>
-            <span class="leftBtn icon-remove_circle_outline"></span>
-            <span class="goodNum">1</span>
-            <span class="rightBtn icon-add_circle"></span>
-          </div>
-        </li>
-      </ul>
+      <div ref="cartScroll" class="cartScroll">
+        <ul class="cartList">
+          <li class="item" v-for="item in selectedFood">
+            <h3 class="footTit">{{item.name}}</h3>
+            <!--添加商品-->
+            <div class="crontrolDiv">
+              <span class="price">￥{{item.price}}</span>
+              <control-cart :food="item"></control-cart>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
+
+  import controlcart from '../controlcart/controlcart'
+
+  //console.log(controlcart)
   export default {
     data () {
       return {
@@ -79,8 +67,8 @@
         default: () => {
           return [
             {
-              price: 10,
-              count: 1
+              price: 0,
+              count: 0
             }
           ]
         }
@@ -94,22 +82,26 @@
         default: 20
       }
     },
+
     // 用于计算，
     computed: {
+
       // 计算总价格
       totalPrice () {
+        //console.log(this.selectedFood)
         let total = 0
         this.selectedFood.forEach((item) => {
-          console.log(item)
+          // console.log(item)
           total += item.price * item.count
         })
         return total
       },
 
       // 计算商品总件数
-      totalCount(){
+      totalCount () {
         let allCount = 0
-        this.selectedFood.forEach( item => {
+        // console.log(this.selectedFood)
+        this.selectedFood.forEach(item => {
           allCount += item.count
         })
         return allCount
@@ -135,23 +127,74 @@
         //console.log(this);
         // console.log(v);
         return v.totalPrice + 2
-      }
+      },
 
+      // 使用计算属性，控制弹出层的列表滚动，这里的逻辑有些绕--------我想直接写点击按钮里
+      showList () {
+        if (!this.totalPrice) {
+          this.cartPopFlag = true
+          return false
+        }
+        let show = !this.cartPopFlag
+        console.log(this.cartPopFlag)
+        console.log(show)
+        if (show) {
+          this.$nextTick(() => {
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.cartScroll, {})
+            } else {
+              this.scroll.refresh()
+            }
+          })
+        }
+
+        return show
+
+      }
     },
+
     // methods方法处理
     methods: {
       // 显示所选商品弹层
       cartShow () {
-        //console.log(this);
-        if (this.totalPrice > 0) {
-          this.cartPopFlag = true
+        // 当没有选中商品的时候，不执行下边的代码
+        if (!this.totalPrice) return
 
+        //当总价格不为0时，可以弹出列表层
+        this.cartPopFlag = !this.cartPopFlag
+
+        // 弹出层滚动条的处理
+        if (this.cartPopFlag) {
+          this.$nextTick(() => {
+            if (!this.scroll) { // 判断是否已经初始化
+              this.scroll = new BScroll(this.$refs.cartScroll, {})
+            } else {
+              this.scroll.refresh()
+            }
+          })
         }
+
       },
       // 关闭所选商品弹层
       cartHidden () {
+        //console.log(this.cartPopFlag);
+        this.cartPopFlag = false
+      },
+
+      //清空购物车, 把所选的每一项商品的数量设置为0
+      clearCart () {
+        this.selectedFood.forEach(item => {
+          item.count = 0
+        })
         this.cartPopFlag = false
       }
+
+    },
+
+    //注册组件
+    components: {
+      // controlCart
+      'controlCart': controlcart
     }
 
   }
@@ -191,7 +234,7 @@
           font-weight: 700
           border-right: 1px solid rgba(255, 255, 255, 0.1)
           &.highlight
-           color :#fff
+            color: #fff
       .cart
         position: absolute
         bottom: 0
@@ -270,6 +313,10 @@
       z-index: 1
       display: block
       padding-bottom: 58px
+      max-height: 300px;
+      .cartScroll
+        overflow: hidden
+        max-height: 260px
       .cartTit
         bg-global()
         height: 40px
@@ -296,27 +343,16 @@
           .footTit
             f-28()
             line-height: 24px
-          .btnBox
+          .crontrolDiv
             position: relative
             display: flex
-            .leftBtn, .rightBtn
-              font-size: 24px
-              line-height: 24px
-            .leftBtn
-              color: rgb(0, 160, 220)
-            .rightBtn
-              color: rgb(0, 160, 220)
-            .goodNum
-              font-size: 10px
-              color: rgb(147, 153, 159)
-              line-height: 24px
-              width: 24px
-              text-align: center
             .price
               font-size: 10px
               color: rgb(240, 20, 20)
               line-height: 24px
-              margin-right: 12px
               font-weight: bold
+
+  /*display: flex*/
+
 
 </style>

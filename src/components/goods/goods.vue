@@ -40,7 +40,7 @@
 
 
     <!--购物车-->
-    <shop-cart :selected-food="selectedFoods" :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
+    <shop-cart ref="shopcartWrap" :selected-food="selectedFoods" :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
 
   </div>
 </template>
@@ -49,7 +49,7 @@
   import foot from '../shopcart/shopcart'
   import controlcart from '../controlcart/controlcart'
   import BScroll from 'better-scroll'
-
+  import connectcart from '../controlcart/connectcart'
   //console.log(controlcart)
 
   let ERR_OK = 0
@@ -73,7 +73,6 @@
     },
     created () {
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special']
-
       this.$ajax.get('/goods')
         .then((res) => {
           //console.log(res.data)
@@ -87,6 +86,17 @@
             })
           }
         })
+    },
+    mounted() {
+      // 接收由子组件$emit触发的事件，注意写在created这个方法里
+      connectcart.$on('cartAdd', (target)=>{
+        // console.log(msg);
+        this.$refs.shopcartWrap.drop(target);
+        /*  this.$nextTick((el)=>{
+
+            this.$refs.shopcartWrap.drop(el);
+          })*/
+      });
     },
     // vue里实时的计算
     computed: {
@@ -168,7 +178,6 @@
 
       }
     }
-
   }
 </script>
 

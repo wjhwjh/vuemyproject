@@ -141,7 +141,9 @@
         if (show) {
           this.$nextTick(() => {
             if (!this.scroll) {
-              this.scroll = new BScroll(this.$refs.cartScroll, {})
+              this.scroll = new BScroll(this.$refs.cartScroll, {
+               click:true  // better-scroll 属性设置
+              })
             } else {
               this.scroll.refresh()
             }
@@ -167,7 +169,9 @@
         if (this.cartPopFlag) {
           this.$nextTick(() => {
             if (!this.scroll) { // 判断是否已经初始化
-              this.scroll = new BScroll(this.$refs.cartScroll, {})
+              this.scroll = new BScroll(this.$refs.cartScroll, {
+               click: true // better-scroll 属性设置
+              })
             } else {
               this.scroll.refresh()
             }
@@ -187,6 +191,13 @@
           item.count = 0
         })
         this.cartPopFlag = false
+      },
+      drop(el){
+
+        console.log('这是组件')
+        console.log(el)
+        console.log(el.offsetTop)
+
       }
 
     },

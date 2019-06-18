@@ -89,14 +89,11 @@
     },
     mounted() {
       // 接收由子组件$emit触发的事件，注意写在created这个方法里
-      connectcart.$on('cartAdd', (target)=>{
-        // console.log(msg);
-        this.$refs.shopcartWrap.drop(target);
-        /*  this.$nextTick((el)=>{
-
-            this.$refs.shopcartWrap.drop(el);
-          })*/
+      // 箭头函数中的this指向定义时的上下文环境
+      connectcart.$on('cartAdd',  (target)=>{
+         this.$refs.shopcartWrap.drop(target);
       });
+
     },
     // vue里实时的计算
     computed: {

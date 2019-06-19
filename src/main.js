@@ -12,7 +12,7 @@ Vue.component('v-header', head)
 // 把axios模块挂载到vue对象上
 Vue.prototype.$ajax = Axios
 
-console.log(new Vue);
+//console.log(new Vue);
 Vue.config.productionTip = false
 Axios.defaults.baseURL = '/api'
 

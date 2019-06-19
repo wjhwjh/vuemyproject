@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="headWrap">
-      <v-header></v-header>
+      <v-header :seller = "sellerData"></v-header>
     </div>
     <ul class="tab">
       <li class="act">
@@ -14,21 +14,44 @@
         <router-link :to="{ path:'/seller'}">商家</router-link>
       </li>
     </ul>
-    <router-view></router-view>
+    <router-view :seller="{'sellerD': sellerData}"></router-view>
 
-    <v-foot></v-foot>
+
   </div>
 </template>
 
 <script>
-  import foot from './components/foot/foot'
+  let ERR_OK = 0
 
   export default {
     data () {
-      return {}
+      return {
+        sellerData:{},
+        height: ''
+      }
     },
-    components: {
-      'v-foot':foot
+    created(){
+      this.$ajax.get('/sellers').then((res)=>{
+       // if (res.data.errno === ERR_OK) this.sellerData = res.data.data;
+      })
+    },
+    methods:{
+      changeWindow(){
+        const _this = this;
+        this.height = document.documentElement.clientHeight
+        window.onresize = ()=>{
+            console.log(this)
+            this.height = document.documentElement.clientHeight
+
+            console.log(this.height)
+
+        }
+      }
+    },
+    watch:{
+     height() {
+          this.changeWindow(this.height)
+     }
     }
   }
 </script>

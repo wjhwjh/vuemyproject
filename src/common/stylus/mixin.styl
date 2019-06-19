@@ -10,7 +10,9 @@ border-1px($color)
     left: 0
     width: 100%
     border-top: 1px solid $color
-border-none()
+border-no()
+  &:after
+    border-top:0
   &:after
     display: none
 // 图片适配问题
@@ -19,6 +21,12 @@ bg-image($url)
   @media (-webkit-min-device-pixel-ratio:3),(min-device-pixel-ratio:3)
     background-image :url($url+"@3x.png")
 
+// 全局颜色
+bg-global()
+ background :#f3f5f7
 
+f-28()
+ font-size :14px
+ color :rgb(7,17,27)
 
 

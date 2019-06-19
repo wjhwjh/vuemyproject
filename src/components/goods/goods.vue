@@ -4,7 +4,7 @@
     <div class="menu-wrap" ref="menuWrap">
       <ul class="menu">
         <li class="item" v-for="(item, index) in goodData" :class="{'current' : getIndex === index}"
-            @click="selectMenu(index, $event)">
+            @click="selectMenu(index, $event)" :key="index">
           <div class="cont">
             <span class="icon" v-if="item.type > 0" :class="classMap[item.type]"> </span>{{ item.name }}
           </div>
@@ -15,10 +15,10 @@
     <!--右边-->
     <div class="good-wrap" ref="foodWrap">
       <ul class="good-list">
-        <li class="good-item food-list-hook" v-for="goods in goodData">
+        <li class="good-item food-list-hook" v-for="(goods, index) in goodData" :key="index">
           <h2 class="good-title">{{goods.name}}</h2>
           <ul class="item-list">
-            <li class="item" v-for="item in goods.foods">
+            <li class="item" v-for="(item, index) in goods.foods" :key="index">
               <div class="img">
                 <img :src="item.image" alt="">
               </div>
@@ -40,7 +40,7 @@
 
 
     <!--购物车-->
-    <shop-cart ref="shopcartWrap" :selected-food="selectedFoods" :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
+    <shop-cart ref="shopcartwrap" :selected-food="selectedFoods" :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
 
   </div>
 </template>
@@ -79,7 +79,7 @@
           let resData = res.data
           if (resData.errno === ERR_OK) {
             this.goodData = resData.data
-
+            console.log(this.goodData)
             this.$nextTick(() => {
               this._initScroll()
               this._calculateHeight()
@@ -91,7 +91,13 @@
       // 接收由子组件$emit触发的事件，注意写在created这个方法里
       // 箭头函数中的this指向定义时的上下文环境
       connectcart.$on('cartAdd',  (target)=>{
-         this.$refs.shopcartWrap.drop(target);
+       console.log(this.$refs.shopcartwrap)
+        this.$refs.shopcartwrap.drop(target)
+       /* this.$nextTick(()=>{
+          this.$refs.shopcartwrap.drop(target);
+        })*/
+
+        console.log(target)
       });
 
     },

@@ -18,7 +18,7 @@
         <li class="good-item food-list-hook" v-for="(goods, index) in goodData" :key="index">
           <h2 class="good-title">{{goods.name}}</h2>
           <ul class="item-list">
-            <li class="item" v-for="(item, index) in goods.foods" :key="index">
+            <li class="item" v-for="(item, index) in goods.foods" :key="index" @click="selectedFood(item)">
               <div class="img">
                 <img :src="item.image" alt="">
               </div>
@@ -38,19 +38,24 @@
       </ul>
     </div>
 
-
     <!--购物车-->
     <shop-cart ref="shopcartwrap" :selected-food="selectedFoods" :minPrice="seller.minPrice"
                :deliveryPrice="seller.deliveryPrice"></shop-cart>
+
+    <!--商品详情-->
+    <food-detail v-if="0"></food-detail>
 
   </div>
 </template>
 
 <script>
-  import foot from '../shopcart/shopcart'
+  import shopcart from '../shopcart/shopcart'
   import controlcart from '../controlcart/controlcart'
-  import BScroll from 'better-scroll'
+  import foodDetail from  '../food/food'
+
   import connectcart from '../controlcart/connectcart'
+  import BScroll from 'better-scroll'
+
   //console.log(controlcart)
 
   let ERR_OK = 0
@@ -64,8 +69,9 @@
       }
     },
     components: {
-      'shopCart': foot,
-      'controlCart': controlcart
+      'shopCart': shopcart,
+      'controlCart': controlcart,
+      'foodDetail': foodDetail
     },
     props: {
       seller: {
@@ -180,6 +186,11 @@
 
         // console.log( this.goodData );
 
+      },
+      // 选中商品查看详情
+      selectedFood(food, event){
+        console.log(food)
+        console.log(event)
       }
     }
   }

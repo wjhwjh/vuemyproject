@@ -5,44 +5,43 @@
       <span>5个</span><i class="icon-keyboard_arrow_right"></i>
     </div>
     <!--背景-->
-    <div class="bg"><img src="./header.jpg" alt=""></div>
+    <div class="bg"><img :src="seller.avatar" alt=""></div>
     <!--中间内容-->
     <div class="headerContent">
       <div class="left">
-        <img src="./header.jpg" alt="">
+        <img :src="seller.avatar" alt="">
       </div>
       <div class="desc">
-        <h2 class="title"><span>粥品香坊(大运村)</span></h2>
-        <div class="sendStyle">蜂鸟转送/ <span>38分钟送达</span></div>
-        <p class="descText">在线支付满28减5，满50减10</p>
+        <h2 class="title"><span>{{seller.name}}</span></h2>
+        <div class="sendStyle">{{seller.description}}/ <span>{{seller.deliveryTime}}分钟送达</span></div>
+        <p class="descText" v-for="(item, index) in seller.supports" v-if="index===0">{{item.description}}</p>
+       <!-- <p class="descText">{{seller.supports[0].description}}</p>-->
       </div>
     </div>
     <!--公告-->
     <div class="headNotice" @click="popShow">
-      <p>粥品香坊其烹饪粥料的秘方源于中国千年古法，再融和现代制作工艺</p>
+      <p>{{seller.bulletin}}</p>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <!--弹窗-->
-    <div class="headPop" v-show="popFlag">
-      <h2>粥品香坊（大运村）</h2>
-      <ul class="evaluate">
-        <li></li>
-      </ul>
-      <h3><span></span>优惠信息<span></span></h3>
-      <ul class="discount">
-        <li>在线支付满28减5，满50减10</li>
-        <li>单人精彩赛</li>
-        <li>清肺雪梨汤8折抢购</li>
-        <li>特价饮品八折抢购</li>
-        <li>单人特色套餐</li>
-      </ul>
-      <h3><span></span>商家公告<span></span></h3>
-      <p class="sellerDetail">
-        粥品香坊其烹饪粥料的秘方源于中国千年古法，在融和现代制作工艺，由世界烹饪大师屈浩先生领衔研发。坚守纯天然、0添加的良心品质深的消费者青睐，发展至今成为粥类引领品牌。是2008年奥运会和2013年园博会指定餐饮服务商。
-      </p>
+    <transition name="fade">
+      <div class="headPop" v-show="popFlag">
+        <h2>{{seller.name}}</h2>
+        <ul class="evaluate">
+          <li></li>
+        </ul>
+        <h3><span></span>优惠信息<span></span></h3>
+        <ul class="discount">
+          <li v-for="item in seller.supports">{{item.description}}</li>
+        </ul>
+        <h3><span></span>商家公告<span></span></h3>
+        <p class="sellerDetail">
+          {{seller.bulletin}}
+        </p>
 
-      <div class="closePop icon-close" @click="popHide"></div>
-    </div>
+        <div class="closePop icon-close" @click="popHide"></div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -53,30 +52,28 @@
         popFlag: false
       }
     },
+    // 父组件传递过来的值
     props: {
       seller: {
         type: Object
       }
     },
     methods: {
+      // 说明弹层显示
       popShow () {
-        this.popFlag = !this.popFlag
-
-        console.log(this._props);
-        console.log(this.seller);
+        this.popFlag = true
       },
+      // 说明弹层隐藏
       popHide () {
-        this.popFlag = !this.popFlag
+        this.popFlag = false
       }
     },
     mounted () {
-      // console.log(this)
-      this.$ajax.get('/goods').then((res) => {
-        // console.log(res)
-      })
-
-
-
+       //  console.log(this.seller)
+       // console.log(111)
+      /*this.$ajax.get('/goods').then((res) => {
+        console.log(res)
+      })*/
     }
   }
 </script>
@@ -165,6 +162,11 @@
       z-index: 99
       color: #fff
       padding: 64px 36px 0
+      transition:all 1s
+      &.fade-enter, &.fade-leave-to
+        opacity :0
+      &.fade-enter-active
+        transition:all 1s
       .closePop
         position: absolute
         font-size: 32px

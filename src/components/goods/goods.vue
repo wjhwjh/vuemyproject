@@ -40,7 +40,8 @@
 
 
     <!--购物车-->
-    <shop-cart ref="shopcartwrap" :selected-food="selectedFoods" :minPrice = "seller.minPrice" :deliveryPrice ="seller.deliveryPrice"></shop-cart>
+    <shop-cart ref="shopcartwrap" :selected-food="selectedFoods" :minPrice="seller.minPrice"
+               :deliveryPrice="seller.deliveryPrice"></shop-cart>
 
   </div>
 </template>
@@ -59,16 +60,16 @@
         goodData: [],
         scrollHeightArr: [],
         scrollY: 0,
-        num:0
+        num: 0
       }
     },
     components: {
       'shopCart': foot,
       'controlCart': controlcart
     },
-    props:{
+    props: {
       seller: {
-        type:Object
+        type: Object
       }
     },
     created () {
@@ -79,7 +80,7 @@
           let resData = res.data
           if (resData.errno === ERR_OK) {
             this.goodData = resData.data
-            console.log(this.goodData)
+            // console.log(this.goodData)
             this.$nextTick(() => {
               this._initScroll()
               this._calculateHeight()
@@ -87,18 +88,18 @@
           }
         })
     },
-    mounted() {
+    mounted () {
       // 接收由子组件$emit触发的事件，注意写在created这个方法里
       // 箭头函数中的this指向定义时的上下文环境
-      connectcart.$on('cartAdd',  (target)=>{
-       console.log(this.$refs.shopcartwrap)
-        this.$refs.shopcartwrap.drop(target)
-       /* this.$nextTick(()=>{
-          this.$refs.shopcartwrap.drop(target);
-        })*/
+      connectcart.$on('cartAdd', (target) => {
+        // console.log(this.$refs.shopcartwrap)
+        // this.$refs.shopcartwrap.drop(target)
 
-        console.log(target)
-      });
+        // 使用nextTick这个接口是未来体验效果更好一些
+        this.$nextTick(() => {
+          this.$refs.shopcartwrap.drop(target)
+        })
+      })
 
     },
     // vue里实时的计算
@@ -118,14 +119,14 @@
       },
       // 统计数量有变化的商品，传递给子组件-- 计算属性，这里对数据进行了处理
       // 有则直接用，没有则创造出来，然后直接用
-      selectedFoods(){
-        let food = [];
-        this.goodData.forEach((goods)=> {
-           goods.foods.forEach(item => {
-              if(!!item.count){
-                food.push(item)
-              }
-           })
+      selectedFoods () {
+        let food = []
+        this.goodData.forEach((goods) => {
+          goods.foods.forEach(item => {
+            if (!!item.count) {
+              food.push(item)
+            }
+          })
         })
         return food
       }
@@ -177,7 +178,7 @@
         // 直接使用，跳转到对应的模块，简直太方便了
         this.foodScroll.scrollToElement(el, 300)
 
-       // console.log( this.goodData );
+        // console.log( this.goodData );
 
       }
     }
@@ -312,7 +313,6 @@
               right: 0
               bottom: 5px
               display: flex;
-
 
 
 </style>

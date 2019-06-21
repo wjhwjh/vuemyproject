@@ -24,8 +24,11 @@
     </div>
 
     <!--商品列表-->
-    <div class="bg" v-show="cartPopFlag" @click="cartHidden"></div>
-    <div class="cartFood" v-show="cartPopFlag">
+    <transition name="fade">
+      <div class="bg" v-show="cartPopFlag" @click="cartHidden"></div>
+    </transition>
+    <transition name="fade">
+      <div class="cartFood" v-show="cartPopFlag">
       <div class="cartTit">
         购物车 <span class="clear" @click="clearCart">清空</span>
       </div>
@@ -42,15 +45,15 @@
         </ul>
       </div>
     </div>
-
+    </transition>
     <!--小球动画-->
     <div class="ball-container">
       <transition-group name="drop"
-                  v-on:before-enter="beforeEnter"
-                  v-on:enter="enter"
-                  v-on:after-enter="afterEnter">
+                        v-on:before-enter="beforeEnter"
+                        v-on:enter="enter"
+                        v-on:after-enter="afterEnter">
         <div class="ball" v-for="ball in balls" v-show="ball.show" :key="ball.id">
-             <div class="inner inner-hook"></div>
+          <div class="inner inner-hook"></div>
         </div>
       </transition-group>
     </div>
@@ -71,24 +74,24 @@
         cartPopFlag: false,
         balls: [
           {
-           id:0,
-           show:false
+            id: 0,
+            show: false
           },
           {
-            id:1,
-            show:false
+            id: 1,
+            show: false
           },
           {
-            id:2,
-            show:false
+            id: 2,
+            show: false
           },
           {
-            id:3,
-            show:false
+            id: 3,
+            show: false
           },
           {
-            id:4,
-            show:false
+            id: 4,
+            show: false
           }
         ],
         dropBalls: []
@@ -172,41 +175,43 @@
           return false
         }
         let show = !this.cartPopFlag
-        console.log(this.cartPopFlag)
-        console.log(show)
+        // console.log(this.cartPopFlag)
+        // console.log(show)
         if (show) {
           this.$nextTick(() => {
             if (!this.scroll) {
               this.scroll = new BScroll(this.$refs.cartScroll, {
-               click:true  // better-scroll 属性设置
+                click: true  // better-scroll 属性设置
               })
             } else {
               this.scroll.refresh()
             }
           })
         }
-
         return show
-
       }
     },
 
     // methods方法处理
     methods: {
-      drop(el) {
-         console.log(el)
-         for(let i=0; i<this.balls.length; i++){
-           let ball = this.balls[i]
-           //console.log(ball)
-           if(!ball.show){
+      drop (el) {
+        /* 这里的逻辑值得细细思考,如何思考
+        *  1. 为什么要循环一组小球
+        *  2. 如何使用这一组小球实现指定的动画
+        *  3. 点击触发，实现动画的小球
+        *  4. 一个小球的实现抛物线和多个小球实现抛物线
+        * */
+
+        for (let i = 0; i < this.balls.length; i++) {
+          let ball = this.balls[i]
+          //console.log(ball)
+          if (!ball.show) {
             ball.show = true
             ball.el = el
-            // console.log(ball)
-             this.dropBalls.push(ball)
-             console.log(this.dropBalls)
+            this.dropBalls.push(ball)
             return
-           }
-         }
+          }
+        }
       },
 
       // 显示所选商品弹层
@@ -222,7 +227,7 @@
           this.$nextTick(() => {
             if (!this.scroll) { // 判断是否已经初始化
               this.scroll = new BScroll(this.$refs.cartScroll, {
-               click: true // better-scroll 属性设置
+                click: true // better-scroll 属性设置
               })
             } else {
               this.scroll.refresh()
@@ -244,47 +249,46 @@
         })
         this.cartPopFlag = false
       },
-      beforeEnter(el) {
-       // console.log('transition---', el )
-        let count = this.balls.length;
+      beforeEnter (el) {
+        // console.log('transition---', el )
+        let count = this.balls.length
         while (count--) {
-          let ball = this.balls[count];
+          let ball = this.balls[count]
           if (ball.show) {
-            let rect = ball.el.getBoundingClientRect();
+            let rect = ball.el.getBoundingClientRect()
 
-            let x = rect.left - 32;
-            let y = -(window.innerHeight - rect.top - 22);
+            let x = rect.left - 32
+            let y = -(window.innerHeight - rect.top - 22)
 
-            console.log(rect, x, y)
+            // console.log(rect, x, y)
 
-            el.style.display = '';
-            el.style.webkitTransform = `translate3d(0,${y}px,0)`;
-            el.style.transform = `translate3d(0,${y}px,0)`;
-            let inner = el.getElementsByClassName('inner-hook')[0];
-            inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
-            inner.style.transform = `translate3d(${x}px,0,0)`;
+            el.style.display = ''
+            el.style.webkitTransform = `translate3d(0,${y}px,0)`
+            el.style.transform = `translate3d(0,${y}px,0)`
+            let inner = el.getElementsByClassName('inner-hook')[0]
+            inner.style.webkitTransform = `translate3d(${x}px,0,0)`
+            inner.style.transform = `translate3d(${x}px,0,0)`
           }
         }
       },
-      enter(el) {
+      enter (el) {
         /* eslint-disable no-unused-vars */
-        let rf = el.offsetHeight;
+        let rf = el.offsetHeight
         this.$nextTick(() => {
-          el.style.webkitTransform = 'translate3d(0,0,0)';
-          el.style.transform = 'translate3d(0,0,0)';
-          let inner = el.getElementsByClassName('inner-hook')[0];
-          inner.style.webkitTransform = 'translate3d(0,0,0)';
-          inner.style.transform = 'translate3d(0,0,0)';
-        });
+          el.style.webkitTransform = 'translate3d(0,0,0)'
+          el.style.transform = 'translate3d(0,0,0)'
+          let inner = el.getElementsByClassName('inner-hook')[0]
+          inner.style.webkitTransform = 'translate3d(0,0,0)'
+          inner.style.transform = 'translate3d(0,0,0)'
+        })
       },
-      afterEnter(el) {
-        let ball = this.dropBalls.shift();
+      afterEnter (el) {
+        let ball = this.dropBalls.shift()
         if (ball) {
-          ball.show = false;
-          el.style.display = 'none';
+          ball.show = false
+          el.style.display = 'none'
         }
       }
-
     },
 
     //注册组件
@@ -294,39 +298,39 @@
     },
     transitions: {
       drop: {
-        beforeEnter(el) {
-          let count = this.balls.length;
+        beforeEnter (el) {
+          let count = this.balls.length
           while (count--) {
-            let ball = this.balls[count];
+            let ball = this.balls[count]
             if (ball.show) {
-              let rect = ball.el.getBoundingClientRect();
-              let x = rect.left - 32;
-              let y = -(window.innerHeight - rect.top - 22);
-              el.style.display = '';
-              el.style.webkitTransform = `translate3d(0,${y}px,0)`;
-              el.style.transform = `translate3d(0,${y}px,0)`;
-              let inner = el.getElementsByClassName('inner-hook')[0];
-              inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
-              inner.style.transform = `translate3d(${x}px,0,0)`;
+              let rect = ball.el.getBoundingClientRect()
+              let x = rect.left - 32
+              let y = -(window.innerHeight - rect.top - 22)
+              el.style.display = ''
+              el.style.webkitTransform = `translate3d(0,${y}px,0)`
+              el.style.transform = `translate3d(0,${y}px,0)`
+              let inner = el.getElementsByClassName('inner-hook')[0]
+              inner.style.webkitTransform = `translate3d(${x}px,0,0)`
+              inner.style.transform = `translate3d(${x}px,0,0)`
             }
           }
         },
-        enter(el) {
+        enter (el) {
           /* eslint-disable no-unused-vars */
-          let rf = el.offsetHeight;
+          let rf = el.offsetHeight
           this.$nextTick(() => {
-            el.style.webkitTransform = 'translate3d(0,0,0)';
-            el.style.transform = 'translate3d(0,0,0)';
-            let inner = el.getElementsByClassName('inner-hook')[0];
-            inner.style.webkitTransform = 'translate3d(0,0,0)';
-            inner.style.transform = 'translate3d(0,0,0)';
-          });
+            el.style.webkitTransform = 'translate3d(0,0,0)'
+            el.style.transform = 'translate3d(0,0,0)'
+            let inner = el.getElementsByClassName('inner-hook')[0]
+            inner.style.webkitTransform = 'translate3d(0,0,0)'
+            inner.style.transform = 'translate3d(0,0,0)'
+          })
         },
-        afterEnter(el) {
-          let ball = this.dropBalls.shift();
+        afterEnter (el) {
+          let ball = this.dropBalls.shift()
           if (ball) {
-            ball.show = false;
-            el.style.display = 'none';
+            ball.show = false
+            el.style.display = 'none'
           }
         }
       }
@@ -352,7 +356,7 @@
       bottom: 22px
       z-index: 200
       &.drop-enter-active
-        opacity :1
+        opacity: 1
         transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
       .inner
         width: 16px
@@ -452,6 +456,11 @@
       height: 100%
       background: rgba(7, 17, 27, 0.6)
       display: block
+      transition:all .5s
+      &.fade-enter, &.fade-leave
+        opacity :0
+      &.fade-enter-active
+        transition:all .5s
     // 已选择的商品
     .cartFood
       position: fixed
@@ -463,7 +472,12 @@
       z-index: 1
       display: block
       padding-bottom: 58px
-      max-height: 300px;
+      max-height: 300px
+      transition:all .5s
+      &.fade-enter, &.fade-leave-to
+        opacity :0
+      &.fade-enter-active
+        transition:all .5s
       .cartScroll
         overflow: hidden
         max-height: 260px

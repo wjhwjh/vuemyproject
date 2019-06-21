@@ -33,10 +33,8 @@
         }else {
           this.food.count++
         }
-
-        // 抛物线动画
+       // 抛物线动画
        connectcart.$emit('cartAdd', event.target)
-
       },
       reduceNum(){
         this.food.count--

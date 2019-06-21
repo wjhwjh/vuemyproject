@@ -32,26 +32,11 @@
     },
     created(){
       this.$ajax.get('/sellers').then((res)=>{
-       // if (res.data.errno === ERR_OK) this.sellerData = res.data.data;
+         if (res.data.errno === ERR_OK) this.sellerData = res.data.data;
       })
     },
     methods:{
-      changeWindow(){
-        const _this = this;
-        this.height = document.documentElement.clientHeight
-        window.onresize = ()=>{
-            console.log(this)
-            this.height = document.documentElement.clientHeight
 
-            console.log(this.height)
-
-        }
-      }
-    },
-    watch:{
-     height() {
-          this.changeWindow(this.height)
-     }
     }
   }
 </script>

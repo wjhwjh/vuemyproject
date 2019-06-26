@@ -2,12 +2,12 @@
   <div class="controlBox">
     <div class="btnBox">
       <transition name="fade" appear:false css:false >
-      <span class="leftBtn icon-remove_circle_outline" @click="reduceNum" v-show="food.count > 0"></span>
+      <span class="leftBtn icon-remove_circle_outline" @click.stop="reduceNum" v-show="food.count > 0"></span>
       </transition>
       <transition name="fade" mode="out-in" appear>
       <span class="goodNum" v-show="food.count > 0">{{food.count}}</span>
       </transition>
-      <span class="rightBtn icon-add_circle" @click="addNum"></span>
+      <span class="rightBtn icon-add_circle" @click.stop="addNum"></span>
     </div>
   </div>
 </template>

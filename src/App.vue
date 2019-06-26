@@ -14,7 +14,7 @@
         <router-link :to="{ path:'/seller'}">商家</router-link>
       </li>
     </ul>
-    <router-view :seller="{'sellerD': sellerData}"></router-view>
+    <router-view :seller="sellerData"></router-view>
 
 
   </div>

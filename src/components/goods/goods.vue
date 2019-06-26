@@ -43,7 +43,10 @@
                :deliveryPrice="seller.deliveryPrice"></shop-cart>
 
     <!--商品详情-->
-    <food-detail v-if="0"></food-detail>
+    <transition name="fade">
+      <food-detail v-if="detailFlag" :foodDetailData="foodDetailData" :seller="seller"></food-detail>
+    </transition>
+
 
   </div>
 </template>
@@ -51,7 +54,7 @@
 <script>
   import shopcart from '../shopcart/shopcart'
   import controlcart from '../controlcart/controlcart'
-  import foodDetail from  '../food/food'
+  import foodDetail from '../foodDetail/foodDetail'
 
   import connectcart from '../controlcart/connectcart'
   import BScroll from 'better-scroll'
@@ -65,7 +68,9 @@
         goodData: [],
         scrollHeightArr: [],
         scrollY: 0,
-        num: 0
+        num: 0,
+        foodDetailData:{},
+        detailFlag:false
       }
     },
     components: {
@@ -93,6 +98,8 @@
             })
           }
         })
+
+
     },
     mounted () {
       // 接收由子组件$emit触发的事件，注意写在created这个方法里
@@ -106,7 +113,7 @@
           this.$refs.shopcartwrap.drop(target)
         })
       })
-
+     console.log(this.seller)
     },
     // vue里实时的计算
     computed: {
@@ -158,7 +165,7 @@
 
       // 把每一个模块的区间存放在数组中
       _calculateHeight () {
-        let elLi = this.$refs.foodWrap.getElementsByClassName('food-list-hook')
+        let elLi = this.$refs.foodWrap.getElementsByClassName('foodDetail-list-hook')
         //console.log(elLi[0].clientWidth);
         let height = 0
         this.scrollHeightArr.push(height)
@@ -176,21 +183,18 @@
           return
         }
         // 获取右边商品列表
-        let foodList = this.$refs.foodWrap.getElementsByClassName('food-list-hook')
+        let foodList = this.$refs.foodWrap.getElementsByClassName('foodDetail-list-hook')
 
         // 获取与点击索引值相同的商品模块
         let el = foodList[index]
 
         // 直接使用，跳转到对应的模块，简直太方便了
         this.foodScroll.scrollToElement(el, 300)
-
-        // console.log( this.goodData );
-
       },
       // 选中商品查看详情
       selectedFood(food, event){
-        console.log(food)
-        console.log(event)
+        this.foodDetailData = food
+        this.detailFlag = true
       }
     }
   }

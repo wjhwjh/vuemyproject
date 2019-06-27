@@ -44,7 +44,7 @@
 
     <!--商品详情-->
     <transition name="fade">
-      <food-detail v-if="detailFlag" :foodDetailData="foodDetailData" :seller="seller"></food-detail>
+      <food-detail v-if="1" :foodDetailData="foodDetailData" :seller="seller"></food-detail>
     </transition>
 
 
@@ -98,8 +98,6 @@
             })
           }
         })
-
-
     },
     mounted () {
       // 接收由子组件$emit触发的事件，注意写在created这个方法里

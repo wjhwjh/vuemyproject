@@ -12,6 +12,7 @@
           <div class="result">月售{{foodDetailData.sellCount}}份, 好评率{{foodDetailData.rating}}%</div>
           <p class="price"><span class="nowPrice">￥</span>{{foodDetailData.price}}<span class="oldPrice" v-if="foodDetailData.oldPrice">￥{{foodDetailData.oldPrice}}</span></p>
         </div>
+
         <div class="desc">
           <h2 class="tit">
             {{seller.name}}
@@ -20,6 +21,7 @@
             {{seller.bulletin}}
           </p>
         </div>
+
         <div class="ratingDiv">
            <food-rating></food-rating>
         </div>
@@ -135,4 +137,5 @@
           background :#fff
           border-top: 1px solid rgba(7, 17, 27, 0.1)
           margin-top: 16px
+          padding :18px 0
 </style>

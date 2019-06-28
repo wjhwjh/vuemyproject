@@ -16,8 +16,8 @@
         <div class="ratingTop">
           <div class="time">2016-07-07 12:34</div>
           <div class="user">
-            <p class="tel"></p>
-            <p class="person"></p>
+            <p class="tel">13681472640</p>
+            <p class="person"><img src="./header.jpg" alt=""></p>
           </div>
         </div>
 
@@ -40,7 +40,6 @@
         </div>
       </li>
     </ul>
-
 
   </div>
 </template>
@@ -100,8 +99,6 @@
         margin-right: 4px
       &.selected .icon-check_circle
         color: rgb(3,166,3)
-
-
     .ratingList
       width: 100%
       .ratingItem
@@ -116,6 +113,21 @@
             flex :1
           .user
             flex :1
+            text-align: right;
+            .tel
+              font-size :10px
+              color :rgb(147,153,159)
+              line-height :12px
+              padding-right: 6px
+              display: inline-block
+            .person
+              width: 12px
+              height: 12px
+              display: inline-block
+              & >img
+                width: 100%
+                height: 100%
+                border-radius :100%
         .ratingText
           font-size: 12px
           color:rgb(7,17,27)

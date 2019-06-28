@@ -11,6 +11,10 @@
           <h2 class="tit">{{foodDetailData.name}}</h2>
           <div class="result">月售{{foodDetailData.sellCount}}份, 好评率{{foodDetailData.rating}}%</div>
           <p class="price"><span class="nowPrice">￥</span>{{foodDetailData.price}}<span class="oldPrice" v-if="foodDetailData.oldPrice">￥{{foodDetailData.oldPrice}}</span></p>
+
+
+           <div class="buy">加入购物车</div>
+
         </div>
 
         <div class="desc">
@@ -99,6 +103,18 @@
           margin-bottom: 16px
           padding: 18px
           position: relative
+          .buy
+            width: 74px
+            height: 24px
+            border-radius :12px
+            text-align :center
+            line-height: 24px
+            color :#fff
+            font-size :10px
+            background :rgb(0,160,220)
+            position: absolute
+            right: 18px
+            bottom: 18px
           .tit
             f-28()
             font-weight: bold

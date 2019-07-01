@@ -103,7 +103,6 @@
         if (dataObj.errno === ERRO_OK) {
           // console.log(dataObj.data)
           this.ratingData = dataObj.data
-
           // console.log(this.ratingData)
         }
       })

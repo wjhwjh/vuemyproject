@@ -143,6 +143,8 @@
         this.selectedFood.forEach(item => {
           allCount += item.count
         })
+
+       // console.log(allCount);
         return allCount
       },
 

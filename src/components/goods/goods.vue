@@ -44,7 +44,7 @@
 
     <!--商品详情-->
     <transition name="fade">
-      <food-detail v-if="1" :foodDetailData="foodDetailData" :seller="seller"></food-detail>
+      <food-detail v-if="detailFlag" :foodDetailData="foodDetailData" :seller="seller"></food-detail>
     </transition>
 
 
@@ -111,7 +111,7 @@
           this.$refs.shopcartwrap.drop(target)
         })
       })
-     console.log(this.seller)
+
     },
     // vue里实时的计算
     computed: {

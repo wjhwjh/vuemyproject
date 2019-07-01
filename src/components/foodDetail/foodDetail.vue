@@ -34,7 +34,7 @@
         </div>
         <div class="ratingDiv">
           <h2 class="tit">商品评价</h2>
-          <ratingselect :ratings="ratingData.ratings" :des = "des"></ratingselect>
+          <ratingselect :ratings="foodDetailData.ratings" :des = "des"></ratingselect>
           <ul class="ratingList clearFix">
             <li class="ratingItem">
               <div class="ratingTop">
@@ -98,14 +98,14 @@
       }
     },
     created () {
-      this.$ajax.get('/ratings').then((res) => {
+      /*this.$ajax.get('/ratings').then((res) => {
         let dataObj = res.data
         if (dataObj.errno === ERRO_OK) {
           // console.log(dataObj.data)
           this.ratingData = dataObj.data
           // console.log(this.ratingData)
         }
-      })
+      })*/
     },
     mounted () {
       // 父组件向子组件传递参数

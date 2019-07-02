@@ -1,29 +1,27 @@
 <template>
     <div class="rateSelectWrap">
       <ul class="ratingMenu">
-        <li class="item item1" >{{des.all}} <span>({{ratings.length}})</span> </li>
-        <li class="item item2" >{{des.positive}} <span>({{positives.length}})</span> </li>
-        <li class="item item3" >{{des.negative}} <span>({{negatives.length}})</span> </li>
+        <li class="item item1" @click="select(2, $event)" :class="{act: active===2}">{{des.all}} <span>({{ratings.length}})</span> </li>
+        <li class="item item2" @click="select(0, $event)" :class="{act: active===0}" >{{des.positive}} <span>({{positives.length}})</span> </li>
+        <li class="item item3" @click="select(1, $event)" :class="{act: active===1}">{{des.negative}} <span>({{negatives.length}})</span> </li>
       </ul>
       <div class="tip selected">
         <span class="icon-check_circle"></span><span>只看有内容的评价</span>
       </div>
-
-      <div>
-        {{ratings}}
-      </div>
-
     </div>
 </template>
 
 <script>
+ import connect from '../connect/connect'
+
  const POSITIVE = 0
  const NEGATIVE = 1
-// const ALL = 2
+ const ALL = 2
 
   export default {
     data(){
       return {
+        active: ALL
       }
     },
     props: {
@@ -48,10 +46,15 @@
 
     },
     methods:{
+      select(rateType, event){
+         if(this.active === rateType)return
+         this.active = rateType
+        connect.$emit('rate',rateType)
+      }
     },
     computed:{
      positives(){
-     console.log(this.ratings.length);
+    // console.log(this.ratings.length);
       return this.ratings.filter((item)=> {
          return item.rateType === POSITIVE
       })
@@ -86,6 +89,8 @@
           background :rgba(0,160,220,0.2)
         &.item3
           background :rgba(77,85,93,0.2)
+        &.act
+          background :#42b983
     .tip
       margin :0 -18px
       border-bottom:1px solid rgba(7,17,27,0.1)

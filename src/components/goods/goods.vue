@@ -56,7 +56,7 @@
   import controlcart from '../controlcart/controlcart'
   import foodDetail from '../foodDetail/foodDetail'
 
-  import connectcart from '../controlcart/connectcart'
+  import connect from '../connect/connect'
   import BScroll from 'better-scroll'
 
   //console.log(controlcart)
@@ -102,8 +102,7 @@
     mounted () {
       // 接收由子组件$emit触发的事件，注意写在created这个方法里
       // 箭头函数中的this指向定义时的上下文环境
-      connectcart.$on('cartAdd', (target) => {
-        // console.log(this.$refs.shopcartwrap)
+      connect.$on('cartAdd', (target) => {
         // this.$refs.shopcartwrap.drop(target)
 
         // 使用nextTick这个接口是未来体验效果更好一些

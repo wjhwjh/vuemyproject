@@ -34,37 +34,28 @@
         </div>
         <div class="ratingDiv">
           <h2 class="tit">商品评价</h2>
-          <ratingselect :ratings="foodDetailData.ratings" :des = "des"></ratingselect>
-          <ul class="ratingList clearFix">
-            <li class="ratingItem">
+          <ratingselect :ratings="foodDetailData.ratings" :des="des"></ratingselect>
+
+
+          <ul class="ratingList clearFix" v-show="ratingData">
+            <li class="ratingItem" v-for="item in ratingData">
               <div class="ratingTop">
                 <div class="time">2016-07-07 12:34</div>
                 <div class="user">
-                  <p class="tel">13681472640</p>
-                  <p class="person"><img src="./header.jpg" alt=""></p>
+                  <p class="tel">{{item.username}}</p>
+                  <p class="person"><img :src="item.avatar" alt=""></p>
                 </div>
               </div>
 
               <div class="ratingText">
-                <span></span> 太少了不够一个人吃
-              </div>
-            </li>
-
-            <li class="ratingItem">
-              <div class="ratingTop">
-                <div class="time">2016-07-07 12:34</div>
-                <div class="user">
-                  <p class="tel">13681472560</p>
-                  <p class="person"></p>
-                </div>
-              </div>
-
-              <div class="ratingText">
-                <span></span> 太少了不够一个人吃
+                <span></span> {{item.text}}
               </div>
             </li>
           </ul>
 
+          <div class="nothingRate" v-show="!ratingData">
+             暂无评论哦~~
+          </div>
         </div>
       </div>
     </div>
@@ -74,19 +65,20 @@
 <script>
   import ratingselect from '../ratingselect/ratingselect'
   import controlcart from '../controlcart/controlcart'
-  import connectcart from '../controlcart/connectcart'
+  import connect from '../connect/connect'
 
   let ERRO_OK = 0
 
   export default {
     data () {
       return {
-        ratingData: [],
+
         des: {
           all: '全部',
           positive: '满意',
           negative: '不满意'
-        }
+        },
+        rateType:2
       }
     },
     props: {
@@ -98,14 +90,7 @@
       }
     },
     created () {
-      /*this.$ajax.get('/ratings').then((res) => {
-        let dataObj = res.data
-        if (dataObj.errno === ERRO_OK) {
-          // console.log(dataObj.data)
-          this.ratingData = dataObj.data
-          // console.log(this.ratingData)
-        }
-      })*/
+
     },
     mounted () {
       // 父组件向子组件传递参数
@@ -114,15 +99,43 @@
           this.$refs.shopcartwrap.drop(target)
         })
       })
-     //  console.log(this.foodDetailData.ratings)
-
+      connect.$on('rate', (msg) => {
+        this.rateType = msg
+      })
+      //console.log(this.ratingData)
     },
     methods: {
       buy () {
         this.$set(this.foodDetailData, 'count', 1)
       }
     },
-    computed: {},
+    computed: {
+      // 筛选评论数据
+      ratingData(){
+        let rateArr = []
+        if(!this.foodDetailData.ratings)return false
+        switch (this.rateType) {
+          case 2:
+            rateArr = this.foodDetailData.ratings
+            break;
+          case 0:
+            rateArr = this.foodDetailData.ratings.filter(item => {
+              if(item.rateType === this.rateType){
+                return item
+              }
+            })
+            break;
+          case 1:
+            rateArr = this.foodDetailData.ratings.filter(item => {
+              if(item.rateType === this.rateType){
+                return item
+              }
+            })
+            break;
+        }
+        return rateArr
+      }
+    },
     components: {
       ratingselect,
       controlcart
@@ -219,13 +232,19 @@
           border-top: 1px solid rgba(7, 17, 27, 0.1)
           margin-top: 16px
           padding: 18px
+          padding-bottom: 100px;
+          .nothingRate
+            text-align :center
+            font-size: 14px
+            color: rgb(77, 85, 93)
+            padding-top: 40px;
           .tit
             font-size: 14px
             color: #07111b
             padding-bottom: 12px
           .ratingList
             width: 100%
-            padding-bottom: 60px;
+            /*padding-bottom: 60px;*/
           .ratingItem
             border-bottom: 1px solid rgba(7, 17, 27, 0.1)
             padding: 16px 0

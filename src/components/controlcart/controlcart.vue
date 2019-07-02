@@ -14,7 +14,7 @@
 
 <script>
  import Vue from 'vue'
- import connectcart from './connectcart'
+ import connect from '../connect/connect'
   export default {
     data(){
       return {
@@ -34,7 +34,7 @@
           this.food.count++
         }
        // 抛物线动画
-       connectcart.$emit('cartAdd', event.target)
+       connect.$emit('cartAdd', event.target)
       },
       reduceNum(){
         this.food.count--

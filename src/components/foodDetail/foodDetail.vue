@@ -34,13 +34,13 @@
         </div>
         <div class="ratingDiv">
           <h2 class="tit">商品评价</h2>
-          <ratingselect :ratings="foodDetailData.ratings" :des="des"></ratingselect>
+          <ratingselect :ratings="foodDetailData.ratings" :des="des"  :selectTypeN="selectType"></ratingselect>
 
-
-          <ul class="ratingList clearFix" v-show="ratingData">
-            <li class="ratingItem" v-for="item in ratingData">
+          <!--是否有评论，有并且长度为真才显示，否则是假-->
+          <ul class="ratingList clearFix" v-show="foodDetailData.ratings && foodDetailData.ratings.length">
+            <li class="ratingItem" v-show="needShow(item.rateType, item.text)"  v-for="item in ratingData">
               <div class="ratingTop">
-                <div class="time">2016-07-07 12:34</div>
+                <div class="time"> {{item.rateTime}}</div>
                 <div class="user">
                   <p class="tel">{{item.username}}</p>
                   <p class="person"><img :src="item.avatar" alt=""></p>
@@ -53,7 +53,7 @@
             </li>
           </ul>
 
-          <div class="nothingRate" v-show="!ratingData">
+          <div class="nothingRate" v-show="!foodDetailData.ratings || !foodDetailData.ratings.length">
              暂无评论哦~~
           </div>
         </div>
@@ -68,17 +68,17 @@
   import connect from '../connect/connect'
 
   let ERRO_OK = 0
-
+  const ALL = 2
   export default {
     data () {
       return {
-
         des: {
           all: '全部',
           positive: '满意',
           negative: '不满意'
         },
-        rateType:2
+        selectType: ALL,
+        onlyContent: false
       }
     },
     props: {
@@ -90,7 +90,7 @@
       }
     },
     created () {
-
+       // console.log(this.selectType)
     },
     mounted () {
       // 父组件向子组件传递参数
@@ -100,40 +100,74 @@
         })
       })
       connect.$on('rate', (msg) => {
-        this.rateType = msg
+        this.selectType = msg
+      })
+
+      connect.$on('onlyContent', (onlyContent) => {
+        this.onlyContent = onlyContent
       })
       //console.log(this.ratingData)
     },
     methods: {
       buy () {
         this.$set(this.foodDetailData, 'count', 1)
+      },
+      // needShow方法要写在method里，因为要传参。 注意这个方法是用来控制v-show
+      needShow(type, text){
+        // 展示当前项，如果为true表明只显示有评价的内容，返回false, 不显示
+        //console.log(this.onlyContent )
+        if(this.onlyContent && !text) {
+           return false
+        }
+        if(this.selectType === ALL){
+          return true
+        }else {
+           return type === this.selectType
+        }
+
       }
     },
     computed: {
       // 筛选评论数据
       ratingData(){
-        let rateArr = []
+       /* let rateArr = []
         if(!this.foodDetailData.ratings)return false
-        switch (this.rateType) {
+
+        console.log( this.selectType )
+
+        if(this.onlyContent){
+          rateArr = this.foodDetailData.ratings.filter(item => {
+            if(item.text){
+              console.log(item.text)
+              return item
+            }
+          })
+
+          console.log(rateArr);
+        }
+
+        switch (this.selectType) {
           case 2:
             rateArr = this.foodDetailData.ratings
             break;
           case 0:
             rateArr = this.foodDetailData.ratings.filter(item => {
-              if(item.rateType === this.rateType){
+              if(item.rateType === this.selectType){
                 return item
               }
             })
             break;
           case 1:
             rateArr = this.foodDetailData.ratings.filter(item => {
-              if(item.rateType === this.rateType){
+              if(item.rateType === this.selectType){
                 return item
               }
             })
             break;
         }
-        return rateArr
+        return rateArr*/
+
+        return this.foodDetailData.ratings
       }
     },
     components: {

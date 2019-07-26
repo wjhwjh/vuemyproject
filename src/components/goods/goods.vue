@@ -44,7 +44,7 @@
 
     <!--商品详情-->
     <transition name="fade">
-      <food-detail v-if="detailFlag" :foodDetailData="foodDetailData" :seller="seller"></food-detail>
+      <food-detail v-if="detailFlag" :foodDetailData="foodDetailData" :seller="seller" v-on:goBack="goBack"></food-detail>
     </transition>
 
 
@@ -192,6 +192,10 @@
       selectedFood(food, event){
         this.foodDetailData = food
         this.detailFlag = true
+      },
+      goBack(res){
+        //console.log(res);
+        this.detailFlag = false
       }
     }
   }
@@ -208,6 +212,14 @@
     // height: 100%
     overflow: hidden
     display: flex
+    .fade-enter
+      left :100%
+    .fade-enter-active, .fade-leave-active
+      transition:all 0.4s
+    .fade-enter-to, .fade-leave
+      left :0
+    .fade-leave-to
+      left :100%
     .menu-wrap
       flex: 0 0 80px
       width: 80px

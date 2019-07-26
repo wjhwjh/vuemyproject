@@ -1,65 +1,73 @@
 <template>
+  <!--这里的滚动是使用浏览器自带的overflow-y：auto-->
+
   <div class="foodDetail">
-    <div class="foodContent">
-      <!--头部-->
-      <div class="headImg">
-        <div class="img"><img :src="foodDetailData.image" class="img" alt=""></div>
-      </div>
-      <!--内容部分-->
-      <div class="cont">
-        <div class="top">
 
-          <h2 class="tit">{{foodDetailData.name}}</h2>
-          <div class="result">月售{{foodDetailData.sellCount}}份, 好评率{{foodDetailData.rating}}%</div>
+      <div class="foodContent">
+        <span class="goBack" @click="$emit('goBack')">返回</span>
+        <!--头部-->
+        <div class="headImg">
+          <div class="img"><img :src="foodDetailData.image" class="img" alt=""></div>
+        </div>
+        <!--内容部分-->
+        <div class="cont">
+          <div class="top">
 
-          <p class="price">
-            <span class="nowPrice">￥</span>{{foodDetailData.price}}
-            <span class="oldPrice" v-if="foodDetailData.oldPrice">￥{{foodDetailData.oldPrice}}</span>
-          </p>
+            <h2 class="tit">{{foodDetailData.name}}</h2>
+            <div class="result">月售{{foodDetailData.sellCount}}份, 好评率{{foodDetailData.rating}}%</div>
 
-          <div class="buy" @click="buy" v-if="foodDetailData.count===0 || !foodDetailData.count">加入购物车</div>
+            <p class="price">
+              <span class="nowPrice">￥</span>{{foodDetailData.price}}
+              <span class="oldPrice" v-if="foodDetailData.oldPrice">￥{{foodDetailData.oldPrice}}</span>
+            </p>
 
-          <div class="controlCartBox">
-            <controlcart :food="foodDetailData"></controlcart>
+            <div class="buy" @click="buy" v-if="foodDetailData.count===0 || !foodDetailData.count">加入购物车</div>
+
+            <div class="controlCartBox">
+              <controlcart :food="foodDetailData"></controlcart>
+            </div>
           </div>
-        </div>
 
-        <div class="desc">
-          <h2 class="tit">
-            {{seller.name}}
-          </h2>
-          <p class="text">
-            {{seller.bulletin}}
-          </p>
-        </div>
-        <div class="ratingDiv">
-          <h2 class="tit">商品评价</h2>
-          <ratingselect :ratings="foodDetailData.ratings" :des="des"  :selectTypeN="selectType"></ratingselect>
+          <div class="desc">
+            <h2 class="tit">
+              {{seller.name}}
+            </h2>
+            <p class="text">
+              {{seller.bulletin}}
+            </p>
+          </div>
 
-          <!--是否有评论，有并且长度为真才显示，否则是假-->
-          <ul class="ratingList clearFix" v-show="foodDetailData.ratings && foodDetailData.ratings.length">
-            <li class="ratingItem" v-show="needShow(item.rateType, item.text)"  v-for="item in ratingData">
-              <div class="ratingTop">
-                <div class="time"> {{item.rateTime}}</div>
-                <div class="user">
-                  <p class="tel">{{item.username}}</p>
-                  <p class="person"><img :src="item.avatar" alt=""></p>
+          <!--评价部分-->
+          <div class="ratingDiv">
+            <h2 class="tit">商品评价</h2>
+            <ratingselect :ratings="foodDetailData.ratings" :des="des" :selectTypeN="selectType"></ratingselect>
+
+            <!--是否有评论，有并且长度为真才显示，否则是假-->
+            <ul class="ratingList clearFix" v-show="foodDetailData.ratings && foodDetailData.ratings.length">
+              <li class="ratingItem" v-show="needShow(item.rateType, item.text)" v-for="item in ratingData">
+                <div class="ratingTop">
+                  <div class="time"> {{item.rateTime}}</div>
+                  <div class="user">
+                    <p class="tel">{{item.username}}</p>
+                    <p class="person"><img :src="item.avatar" alt=""></p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="ratingText">
-                <span></span> {{item.text}}
-              </div>
-            </li>
-          </ul>
-
-          <div class="nothingRate" v-show="!foodDetailData.ratings || !foodDetailData.ratings.length">
-             暂无评论哦~~
+                <div class="ratingText">
+                  <span></span> {{item.text}}
+                </div>
+              </li>
+            </ul>
+            <!--把评论放在当前页面了-->
+            <div class="nothingRate" v-show="!foodDetailData.ratings || !foodDetailData.ratings.length">
+              暂无评论哦~~
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
   </div>
+
 </template>
 
 <script>
@@ -90,82 +98,92 @@
       }
     },
     created () {
-       // console.log(this.selectType)
+      // console.log(this.selectType)
     },
     mounted () {
-      // 父组件向子组件传递参数
+      // 接收子组件购物车的传递过来的参数
       this.$on('cartAdd', (target) => {
         this.$nextTick(() => {
           this.$refs.shopcartwrap.drop(target)
         })
       })
+
+      // 接收子组件变量rate传递过来的参数, 评论类型参数
       connect.$on('rate', (msg) => {
         this.selectType = msg
       })
 
+      //接收子组件传递过来的参数，控制是否显示全部评价，还是只显示有内容的评价
+      // onlyContent默认是false,显示全部，true只显示有内容的评论
       connect.$on('onlyContent', (onlyContent) => {
         this.onlyContent = onlyContent
       })
-      //console.log(this.ratingData)
+
     },
     methods: {
       buy () {
         this.$set(this.foodDetailData, 'count', 1)
       },
-      // needShow方法要写在method里，因为要传参。 注意这个方法是用来控制v-show
-      needShow(type, text){
-        // 展示当前项，如果为true表明只显示有评价的内容，返回false, 不显示
-        //console.log(this.onlyContent )
-        if(this.onlyContent && !text) {
-           return false
+      // needShow方法要写在method里，因为要传参。 注意这个方法是用来控制v-show, v-show的值可以是一个参数
+      //
+      needShow (type, text) {
+        // 先判断是否显示所有的评论，还是只显示有内容的评论
+        if (this.onlyContent && !text) {  // 当this.onlyContent为true, text内容为空时评论不显示，也就是return false
+          return false
         }
-        if(this.selectType === ALL){
+
+        // 如果上述this.onlyContent为true, text为true时，if不执行，这时展示的是有内容的评论， 则判断当前展示的是 全部评论、满意还是吐槽
+        // 如果this.onlyContent为false时, 展示的是全部评论内容，有评论和没有评论的
+        if (this.selectType === ALL) {
           return true
-        }else {
-           return type === this.selectType
+        } else {
+          return type === this.selectType
         }
+
+      },
+      goBack(){
 
       }
     },
     computed: {
       // 筛选评论数据
-      ratingData(){
-       /* let rateArr = []
-        if(!this.foodDetailData.ratings)return false
+      ratingData () {
+        /* let rateArr = []
+         if(!this.foodDetailData.ratings)return false
 
-        console.log( this.selectType )
+         console.log( this.selectType )
 
-        if(this.onlyContent){
-          rateArr = this.foodDetailData.ratings.filter(item => {
-            if(item.text){
-              console.log(item.text)
-              return item
-            }
-          })
+         if(this.onlyContent){
+           rateArr = this.foodDetailData.ratings.filter(item => {
+             if(item.text){
+               console.log(item.text)
+               return item
+             }
+           })
 
-          console.log(rateArr);
-        }
+           console.log(rateArr);
+         }
 
-        switch (this.selectType) {
-          case 2:
-            rateArr = this.foodDetailData.ratings
-            break;
-          case 0:
-            rateArr = this.foodDetailData.ratings.filter(item => {
-              if(item.rateType === this.selectType){
-                return item
-              }
-            })
-            break;
-          case 1:
-            rateArr = this.foodDetailData.ratings.filter(item => {
-              if(item.rateType === this.selectType){
-                return item
-              }
-            })
-            break;
-        }
-        return rateArr*/
+         switch (this.selectType) {
+           case 2:
+             rateArr = this.foodDetailData.ratings
+             break;
+           case 0:
+             rateArr = this.foodDetailData.ratings.filter(item => {
+               if(item.rateType === this.selectType){
+                 return item
+               }
+             })
+             break;
+           case 1:
+             rateArr = this.foodDetailData.ratings.filter(item => {
+               if(item.rateType === this.selectType){
+                 return item
+               }
+             })
+             break;
+         }
+         return rateArr*/
 
         return this.foodDetailData.ratings
       }
@@ -268,7 +286,7 @@
           padding: 18px
           padding-bottom: 100px;
           .nothingRate
-            text-align :center
+            text-align: center
             font-size: 14px
             color: rgb(77, 85, 93)
             padding-top: 40px;
@@ -278,7 +296,7 @@
             padding-bottom: 12px
           .ratingList
             width: 100%
-            /*padding-bottom: 60px;*/
+          /*padding-bottom: 60px;*/
           .ratingItem
             border-bottom: 1px solid rgba(7, 17, 27, 0.1)
             padding: 16px 0
@@ -311,5 +329,11 @@
               color: rgb(7, 17, 27)
               line-height: 16px
 
-
+      .goBack
+        position: absolute
+        top: 16px
+        left: 24px
+        z-index: 2
+        color: #000
+        font-weight: bold
 </style>

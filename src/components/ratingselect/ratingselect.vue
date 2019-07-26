@@ -25,7 +25,7 @@
     data () {
       return {
         active: ALL,
-        onlyContent: false
+        onlyContent: false  // 是否展示全部评论，全部 和 只看有内容的
       }
     },
     props: {
@@ -50,14 +50,23 @@
         // console.log(this.selectType)
     },
     methods: {
+      // 评论分类点击按钮事件， 根据不同的参数，按钮样式不同， 同时把参数传递会父组件，用于展示相应的评论信息
       select (type, event) {
+        // 如果点击同一个按钮，跳出方法
         if (this.active === type) return
+
+        // 否则把值赋给active
         this.active = type
-        //console.log(this.selectType);
+
+        //触发一个变量，把参数传递给父组件
         connect.$emit('rate', type)
       },
+      // 是否展示全部评论，还是只展示有内容的
       rateSelect(){
+        // 默认是展示全部，取反来控制
         this.onlyContent = !this.onlyContent
+
+        // 注册一个变量，把对应的变量传递给父组件
         connect.$emit('onlyContent', this.onlyContent)
       }
     },

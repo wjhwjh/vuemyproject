@@ -22,7 +22,7 @@ export default new Router({
         },
         {
             path: '/ratingselect',
-            component: ratingselect,
+            component: ratingselect
 
         }
     ]

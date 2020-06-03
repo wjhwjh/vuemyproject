@@ -7,22 +7,23 @@ import ratingselect from '../components/ratingselect/ratingselect'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      redirect:'/goods'
-    },
-    {
-      path:'/goods',
-      component:goods
-    },
-    {
-      path:'/seller',
-      component:seller
-    },
-    {
-      path:'/ratingselect',
-      component:ratingselect
-    }
-  ]
+    routes: [{
+            path: '/',
+            redirect: '/goods'
+        },
+        {
+            path: '/goods',
+            component: goods,
+            name: 'goods'
+        },
+        {
+            path: '/seller',
+            component: seller
+        },
+        {
+            path: '/ratingselect',
+            component: ratingselect,
+
+        }
+    ]
 })

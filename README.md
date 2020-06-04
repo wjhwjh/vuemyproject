@@ -29,6 +29,14 @@ webpack灵活运用
 
 对配置文件进行研究，主要的作用有哪些？ 都有那些特性？
 
+process.env.NODE_ENV决定是否用于生产环境，
+
+值为production时表示生产环境，用于上线用的。
+
+dev代表开发环境
+
+build表示生产环境
+
 
 eslint代码校验
 

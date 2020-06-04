@@ -4,8 +4,12 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
+console.log('俺也不知道是啥--', config);
+
 // 返回一个文件
 function resolve(dir) {
+    //console.log('输出一个值', __dirname);
+    // __dirname 是一个内置的参数，指的是当前目录文件
     return path.join(__dirname, '..', dir)
 }
 
@@ -22,13 +26,19 @@ function resolve(dir) {
 
 module.exports = {
     context: path.resolve(__dirname, '../'),
-    // 入口文件
+    // 入口文件，构建内部依赖图的开始
+    // 可以配置多个入口文件
     entry: {
         app: './src/main.js'
     },
+    // 在哪里输出所创建最后文件，根据依赖图创建的文件
     output: {
+        // 在生产环境中最后输出文件的目录路径
         path: config.build.assetsRoot,
+        // webpack运行时，整合每个模块时会把chunk id 映射到这里
         filename: '[name].js',
+        //publicPath属性判断是否是生产环境，如果是生产环境就执行build,否则就是开发环境
+        // 
         publicPath: process.env.NODE_ENV === 'production' ?
             config.build.assetsPublicPath : config.dev.assetsPublicPath
     },

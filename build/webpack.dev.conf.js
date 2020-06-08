@@ -11,7 +11,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 
-console.log('webpack.dev.conf 是这个文件---');
+//console.log('webpack.dev.conf 是这个文件---');
 
 /*引入自己的数据*/
 const express = require('express')
@@ -48,9 +48,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         host: HOST || config.dev.host,
         port: PORT || config.dev.port,
         open: config.dev.autoOpenBrowser,
-        overlay: config.dev.errorOverlay ?
-            { warnings: false, errors: true } :
-            false,
+        overlay: config.dev.errorOverlay ? { warnings: false, errors: true } : false,
         publicPath: config.dev.assetsPublicPath,
         proxy: config.dev.proxyTable,
         quiet: true, // necessary for FriendlyErrorsPlugin
@@ -123,8 +121,7 @@ module.exports = new Promise((resolve, reject) => {
                     messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
                 },
                 onErrors: config.dev.notifyOnErrors ?
-                    utils.createNotifierCallback() :
-                    undefined
+                    utils.createNotifierCallback() : undefined
             }))
 
             resolve(devWebpackConfig)

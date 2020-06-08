@@ -13,8 +13,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = require('../config/prod.env')
 
-console.log('输出的是啥--', baseWebpackConfig.output.filename);
-console.log('webpack.prod.conf 是这个文件---');
+//console.log('输出的是啥--', baseWebpackConfig.output.filename);
+//console.log('webpack.prod.conf 是这个文件---');
 
 const webpackConfig = merge(baseWebpackConfig, {
     module: {

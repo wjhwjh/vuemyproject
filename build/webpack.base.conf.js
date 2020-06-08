@@ -4,7 +4,7 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-console.log('俺也不知道是啥--', config);
+//console.log('俺也不知道是啥--', config);
 
 // 返回一个文件
 function resolve(dir) {
@@ -35,9 +35,10 @@ module.exports = {
     output: {
         // 在生产环境中最后输出文件的目录路径
         path: config.build.assetsRoot,
-        // webpack运行时，整合每个模块时会把chunk id 映射到这里
+        // webpack运行时，整合每个模块时会把chunk id 映射到这里,最后每个模块打包后的文件
         filename: '[name].js',
-        //publicPath属性判断是否是生产环境，如果是生产环境就执行build,否则就是开发环境
+        //publicPath属性判断是否是生产环境，如果是生产环境就使用生产环境build中的路径,
+        //否则就使用开发环境的路径
         // 
         publicPath: process.env.NODE_ENV === 'production' ?
             config.build.assetsPublicPath : config.dev.assetsPublicPath

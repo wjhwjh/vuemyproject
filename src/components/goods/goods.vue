@@ -46,8 +46,6 @@
     <transition name="fade">
       <food-detail v-if="detailFlag" :foodDetailData="foodDetailData" :seller="seller" v-on:goBack="goBack"></food-detail>
     </transition>
-
-
   </div>
 </template>
 
@@ -87,7 +85,7 @@
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special']
       this.$ajax.get('/goods')
         .then((res) => {
-          //console.log(res.data)
+           console.log(res.data)
           let resData = res.data
           if (resData.errno === ERR_OK) {
             this.goodData = resData.data

@@ -11,12 +11,14 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 
-//console.log('webpack.dev.conf 是这个文件---');
+console.log('webpack.dev.conf 是这个文件---');
 
 /*引入自己的数据*/
 const express = require('express')
 const app = express()
 let appData = require('../data.json')
+
+console.log('请求的数据', appData);
 let seller = appData.seller
 let goods = appData.goods
 let ratings = appData.ratings

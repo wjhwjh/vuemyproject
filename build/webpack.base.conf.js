@@ -4,7 +4,7 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-//console.log('俺也不知道是啥--', config);
+console.log('这个是webpackbase的文件--');
 
 // 返回一个文件
 function resolve(dir) {
